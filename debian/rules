@@ -1,0 +1,107 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+# Uncomment this to turn on all hardening flags
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# extra flags
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,-z,defs
+
+CPPFLAGS=$(shell dpkg-buildflags --get CPPFLAGS)
+CFLAGS=$(shell dpkg-buildflags --get CFLAGS) $(CPPFLAGS)
+CXXFLAGS=$(shell dpkg-buildflags --get CXXFLAGS) $(CPPFLAGS)
+LDFLAGS=$(shell dpkg-buildflags --get LDFLAGS)
+
+# shared library version
+version= 0.2.4
+deb_version=$(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
+
+major=0
+
+builddir/Makefile:
+	dh_testdir
+	# Add here commands to configure the package.
+	mkdir -p builddir
+	cd builddir && cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_C_FLAGS="$(CFLAGS)" \
+		-DCMAKE_LD_FLAGS="$(LDFLAGS)" -DCMAKE_CXX_FLAGS="$(CXXFLAGS)" \
+		-DCMAKE_SKIP_RPATH=ON -DCMAKE_VERBOSE_MAKEFILE=ON
+
+#build-doxy: build-doxy-stamp
+#build-doxy-stamp: $(QUILT_STAMPFN)
+#	dh_testdir
+#	doxygen
+#	touch $@
+
+build: build-arch build-indep
+
+build-arch:  build-stamp
+
+build-indep: build-stamp
+	
+build-stamp:  builddir/Makefile 
+	dh_testdir
+	# Add here commands to compile the package.
+	$(MAKE) -C builddir
+	touch $@
+
+clean: 
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp 
+	# Add here commands to clean up after the build process.
+	rm -rf builddir
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep  
+	dh_installdirs
+	# Add here commands to install the package into debian/tmp
+	$(MAKE) -C builddir DESTDIR=$(CURDIR)/debian/tmp install
+	dh_install --fail-missing --sourcedir=debian/tmp
+
+
+# Build architecture-independent files (doc and data).
+binary-indep: install
+	dh_testdir -puvcdynctrl-data
+	dh_testroot -puvcdynctrl-data
+	dh_installchangelogs -puvcdynctrl-data
+	dh_installdocs -puvcdynctrl-data debian/copyright
+	dh_lintian -puvcdynctrl-data
+	dh_link -puvcdynctrl-data
+	dh_compress -puvcdynctrl-data
+	dh_fixperms -puvcdynctrl-data
+	dh_installdeb -puvcdynctrl-data
+	dh_gencontrol -puvcdynctrl-data
+	dh_md5sums -puvcdynctrl-data
+# build deb packages 
+	dh_builddeb -puvcdynctrl-data
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a
+	dh_installdocs -a debian/copyright
+	dh_lintian -a
+	dh_link -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_strip --exclude=uvcdynctrl --dbg-package=libwebcam0-dbg
+	dh_strip --exclude=libwebcam0 --dbg-package=uvcdynctrl-dbg
+# strict internal dependencies
+	dh_makeshlibs -p"libwebcam0" -V"libwebcam0 (>= $(deb_version))";
+	env LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(CURDIR)/debian/tmp/usr/lib" \
+	dh_shlibdeps
+	dh_installdeb -a
+	dh_gencontrol -a
+	dh_md5sums -a
+# build deb packages 
+	dh_builddeb -a
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install 

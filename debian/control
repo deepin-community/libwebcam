@@ -1,0 +1,109 @@
+Source: libwebcam
+Section: libs
+Priority: extra
+Maintainer: Paulo Assis <pj.assis@gmail.com>
+Build-Depends: debhelper (>= 7), cmake, libxml2-dev, pkg-config, gengetopt
+Standards-Version: 3.9.3
+Homepage: http://www.quickcamteam.net/software/libwebcam
+
+Package: libwebcam0
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Webcam Library 
+ The Webcam Library libwebcam is designed to simplify 
+ the development of webcam applications, primarily on Linux but 
+ with an option to be ported to other platforms, in particular 
+ Solaris. It realizes part of what the unwritten Video4Linux user
+ space library was always supposed to be: an easy to use library
+ that shields its users from many of the difficulties and problems
+ of using the V4L2 API directly.
+
+Package: libwebcam0-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, libwebcam0 (= ${binary:Version})
+Description: Webcam Library - Development files
+ This package provides the files needed to build apps that use libwecam.
+ .
+ The Webcam Library libwebcam is designed to simplify 
+ the development of webcam applications, primarily on Linux but 
+ with an option to be ported to other platforms, in particular 
+ Solaris. It realizes part of what the unwritten Video4Linux user
+ space library was always supposed to be: an easy to use library
+ that shields its users from many of the difficulties and problems
+ of using the V4L2 API directly.
+ 
+Package: libwebcam0-dbg
+Section: debug
+Architecture: any
+Depends: ${misc:Depends}, libwebcam0 (= ${binary:Version})
+Description: Debug Symbols for the Webcam Library
+ This package contains debug data of the libwebcam related shared libraries.
+ .
+ Most people will not need this package. Please install it to produce useful
+ stacktraces to help debugging the webcam library.
+ .
+ The Webcam Library libwebcam is designed to simplify 
+ the development of webcam applications, primarily on Linux but 
+ with an option to be ported to other platforms, in particular 
+ Solaris. It realizes part of what the unwritten Video4Linux user
+ space library was always supposed to be: an easy to use library
+ that shields its users from many of the difficulties and problems
+ of using the V4L2 API directly.
+
+Package: uvcdynctrl-data
+Section: utils
+Architecture: all
+Depends: ${misc:Depends}
+Description: Command line tool to control v4l2 devices - data files
+ This package provides data files needed by uvcdynctrl to add
+ vendor specific controls to uvc devices
+ .
+ uvcdynctrl is part of the Webcam Library.
+ .
+ The Webcam Library libwebcam is designed to simplify 
+ the development of webcam applications, primarily on Linux but 
+ with an option to be ported to other platforms, in particular 
+ Solaris. It realizes part of what the unwritten Video4Linux user
+ space library was always supposed to be: an easy to use library
+ that shields its users from many of the difficulties and problems
+ of using the V4L2 API directly.
+
+Package: uvcdynctrl
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libwebcam0 (= ${binary:Version}), uvcdynctrl-data
+Description: Command line tool to control v4l2 devices
+ This package provides the tools needed to add vendor specific
+ controls to uvc devices.
+ .
+ uvcdynctrl is part of the Webcam Library.
+ .
+ The Webcam Library libwebcam is designed to simplify 
+ the development of webcam applications, primarily on Linux but 
+ with an option to be ported to other platforms, in particular 
+ Solaris. It realizes part of what the unwritten Video4Linux user
+ space library was always supposed to be: an easy to use library
+ that shields its users from many of the difficulties and problems
+ of using the V4L2 API directly.
+
+Package: uvcdynctrl-dbg
+Section: debug
+Architecture: any
+Depends: ${misc:Depends}, uvcdynctrl (= ${binary:Version})
+Description: Debug Symbols for uvcdynctrl
+ This package contains debug data for uvcdynctrl
+ .
+ Most people will not need this package. Please install it to produce useful
+ stacktraces to help debugging the webcam library.
+ .
+ uvcdynctrl is part of the Webcam Library.
+ .
+ The Webcam Library libwebcam is designed to simplify 
+ the development of webcam applications, primarily on Linux but 
+ with an option to be ported to other platforms, in particular 
+ Solaris. It realizes part of what the unwritten Video4Linux user
+ space library was always supposed to be: an easy to use library
+ that shields its users from many of the difficulties and problems
+ of using the V4L2 API directly.
+

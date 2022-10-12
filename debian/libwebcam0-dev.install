@@ -1,0 +1,5 @@
+usr/include/dynctrl-logitech.h
+usr/include/webcam.h
+usr/lib/libwebcam.a
+usr/lib/libwebcam.so
+usr/lib/pkgconfig/libwebcam.pc

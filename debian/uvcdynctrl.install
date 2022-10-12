@@ -1,0 +1,4 @@
+usr/bin
+lib/udev/uvcdynctrl
+lib/udev/rules.d/*.rules
+usr/share/man/man1
